@@ -137,18 +137,33 @@
 /*商品详情*/
 #commodity {
   height: 660px;
-  margin-top: 20px; }
+  margin-top: 20px;
+  position: relative;
+ }
   #commodity .left {
     width: 398px;
     height: 500px;
-    float: left;
     margin-right: 28px;
-    border: 1px solid #d0d0d0; }
-    #commodity .left .i {
+    border: 1px solid #d0d0d0; 
+    position: absolute;
+  }
+    #commodity .left img {
       width: 398px;
-      height: 398px;
+      height: 400px;
       border-bottom: 1px solid #d0d0d0;
       margin-bottom: 16px; }
+    #commodity .left span{
+      position: absolute;
+      left:0;top:0;
+      background: rgba(200,200,200,0.6);
+      display: none;}
+      #commodity .left p{
+        width:398px;height:398px;
+        margin: 0;
+        position: absolute;
+        z-index: 1;
+        left:0;top:0;
+      }
     #commodity .left a {
       display: block;
       text-align: center;
@@ -159,8 +174,18 @@
         width: 25px;
         height: 25px;
         margin: 0 5px; }
+        #commodity .left1 {
+          width: 398px;
+          height:400px;
+          position:absolute;left:600px;top:0;overflow: hidden;display: none;
+          z-index:1;
+        }
+      #commodity .left1 img{
+        width: 800px;position: absolute;
+      }
   #commodity .middle {
-    float: left;
+    position: absolute;
+    left:520px;
     width: 600px; }
     #commodity .middle h3 {
       font: 18px/2 "";

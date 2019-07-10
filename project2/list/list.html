@@ -7,6 +7,7 @@
     <title>list</title>
     <link rel="stylesheet" href="css/public.css">
     <link rel="stylesheet" href="css/index.css">
+    
 </head>
 <body>
     <!--顶部-->
@@ -44,7 +45,7 @@
             </div>                
             <div class="car">
                 <img src="img/购物车下单 (1).png" alt="">
-                <span>我的购物车<i></i></span>
+                <span><a href="../car/car.html">我的购物车</a><i></i></span>
             </div>
         </div>
     </div>
@@ -182,19 +183,17 @@
                 <i><input type="checkbox" class="cb">自营商品</i>
                 <i><input type="checkbox" class="cb">包邮</i>
             </div>
-            <div class="main2">
+            <div id="main2">
                 <ul class="shang">
-                    <li>
-                        <a href="#" class="big"><img src="img/banner2.jpg" alt=""></a>
-                        <div class="img1">
-                            <span>￥118.00</span>
-                            <em>已售1018件</em>
-                            <p>兴盛繁荣-高档会议桌花-19枝粉玫瑰，16枝粉康乃馨，6枝红掌，4枝白百合，搭配散尾葵叶、巴西叶、书带草；适合于公司、商务洽谈、各种会议场合。</p>
-                            <a href="#"><img src="img/查看详情.png" alt="">详情</a>
-                            <a href="#"><img src="img/收藏.png" alt="">收藏</a>
-                            <a href="#"><img src="img/购物车 (1).png">抢先预购</a>                      
-                        </div>                    
-                     </li>
+                    <!-- <li>
+                        <a href="#"><img src="img/banner2.jpg" alt=""></a>
+                        <span>￥118.00</span>
+                        <em>已售1018件</em>
+                        <p>兴盛繁荣-高档会议桌花-19枝粉玫瑰，16枝粉康乃馨，6枝红掌，4枝白百合，搭配散尾葵叶、巴西叶、书带草；适合于公司、商务洽谈、各种会议场合。</p>
+                        <b><img src="img/查看详情.png" alt="">详情</b>
+                        <b><img src="img/收藏.png" alt="">收藏</b>
+                        <b><img src="img/购物车 (1).png">抢先预购</b>                                
+                     </li> -->
                     <!--<li>
                         <a href="#" class="big"><img src="img/banner3.jpg" alt=""></a>
                         <div class="img1">
@@ -467,7 +466,8 @@
 
     class List{
         constructor(){
-            this.min2 = document.getElementsByClassName("min2");
+            this.main2 = document.getElementById("main2");
+            console.log(this.main2);
             this.url = "http://localhost:8181/project/data/goods.json";
             
             this.init();
@@ -475,17 +475,19 @@
         }
         addEvent(){
             var that = this;
-            this.min2.onclick = function(eve){
+            this.main2.onclick = function(eve){
+                console.log(1);
                 var e = eve || window.event;
                 var t = e.target || e.srcElement;
                 if(t.className == "addCar"){
                     that.id = t.parentNode.getAttribute("index");  // 2.获取当前的商品ID
+                    console.log(that.id);
                     that.setData();    // 3.存localstorage
                 }
             }
         }
         setData(){
-             console.log(this.id);
+            console.log(this.id);
             this.goods = localStorage.getItem("goods");
 
             if(this.goods){
@@ -514,7 +516,7 @@
         }
         init(){
             var that = this;
-            ajaxPost(this.url,function(res){
+            ajaxGet(this.url,function(res){
                 that.res = JSON.parse(res);
                 that.display()
             })
@@ -524,19 +526,17 @@
             for(var i=0;i<this.res.length;i++){
                 str += `<li class="box" index="${this.res[i].goodsId}">
                             <img src="${this.res[i].src}" alt="">
-                            <div class="img1">
-                                <span>￥118.00</span>
-                                <em>已售1018件</em>
-                                <p>兴盛繁荣-高档会议桌花-19枝粉玫瑰，16枝粉康乃馨，6枝红掌，4枝白百合，搭配散尾葵叶、巴西叶、书带草；适合于公司、商务洽谈、各种会议场合。</p>
-                                <a href="#"><img src="img/查看详情.png" alt="">详情</a>
-                                <a href="#"><img src="img/收藏.png" alt="">收藏</a>
-                                <a href="#"><img src="img/购物车 (1).png">抢先预购</a>
-                            </div>                    
+                            <span>${this.res[i].price}</span>
+                            <em>已售1018件</em>
+                            <p>${this.res[i].name}</p>
+                            <b><img src="img/查看详情.png" alt="">详情</b>
+                            <b><img src="img/收藏.png" alt="">收藏</b>
+                            <b class="addCar"><img src="img/购物车 (1).png">加入购物车</b>                 
                         </li>`;
             }
-            this.cont.innerHTML = str;
+            this.main2.innerHTML = str;
         }   
     }
-    new GoodsList;
+    new List();
 </script>
 </html>

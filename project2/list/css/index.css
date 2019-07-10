@@ -220,14 +220,14 @@
     border: 1px solid #d0d0d0;
     color: #8b9795; }
 
-    #listM #main2 {
+  #listM #main2 {
       margin-top: 60px;
       width: 1200px;
-      height: 1400px;
+      height: 1100px;
      }
   #listM #main2 ul {
         width: 1200px;
-        height: 1400px; }
+        height: 1100px; }
   #listM #main2 .box{
           width: 210px;
           height: 300px;
