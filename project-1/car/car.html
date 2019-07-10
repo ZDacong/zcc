@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>car</title>
+    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/car.css">
+</head>
+<body>
+        <div id="top" class="floor">
+            <div class="margin">
+                <div class="left">
+                    <span><img src="../img/1.png" alt="">青岛</span>
+                </div>
+                <div class="right">
+                    <a href="#">我的订单</a>
+                    <i>|</i>
+                    <a href="#">我的浏览</a>
+                    <i>|</i>
+                    <a href="#">我的收藏</a>
+                    <i>|</i>
+                    <a href="#">在线客服</a>
+                    <i>|</i>
+                    <a href="#">网站导航</a>
+                    <img src="../img/2.png" alt="">
+                </div>
+            </div>
+        </div>
+
+        <div id="header">
+            <div class="margin">
+                <div class="left">
+                    <img src="../img/logo.png" alt="">
+                    <span>购物车（）</span>
+                </div>
+                <div class="right">
+                    <input type="text" value="康乃馨" id="text">
+                    <input type="button" value="搜索" id="button">
+                </div>
+            </div>
+        </div>
+
+        <div id="title">
+            <div class="margin">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>商品图片</th>
+                            <th>商品名称</th>
+                            <th>商品价格</th>
+                            <th>商品数量</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr>
+                            <td><img src="" alt=""></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="del">X</td>
+                        </tr> -->
+                    </tbody>
+                </table>
+                <div class="wu">
+                    <img src="../img/Q.png" alt="">
+                    <p>购物车快饿瘪了，主人快给我挑点宝贝吧~</p>
+                    <a href="../list/list.html">马上去逛逛</a>
+                </div>
+                
+            </div>
+        </div>
+        
+
+        <!--底部2-->
+    <div id="footer2">
+        <div class="margin">
+            <a href="#">首页</a>
+            <span>|</span>
+            <a href="#">隐私保护</a>
+            <span>|</span>
+            <a href="#">联系我们</a>
+            <span>|</span>
+            <a href="#">免责条款</a>
+            <span>|</span>
+            <a href="#">公司简介</a>
+            <span>|</span>
+            <a href="#">意见反馈</a>
+            <span>|</span>
+            <p>©2017-2019 zhangdacong.com 版权所有 ICP备案证书号36127388 FLOWER by 大葱鲜花预订</p>
+        </div>
+    </div>
+</body>
+<script src="../js/ajax.js"></script>
+<script>
+
+    function Car(){
+        this.tbody = document.querySelector("tbody");
+        this.odiv = document.querySelector(".wu");
+        this.url = "http://localhost:8181/project/data/goods.json";
+        
+        this.init();
+        this.addEvent();//绑定删除事件
+    }
+    Car.prototype.addEvent = function(){
+        var that = this;
+        this.tbody.onclick = function(){
+            //console.log(1);
+            if(event.target.className == "del"){
+                that.id=event.target.parentNode.getAttribute("index");
+                //console.log(id);
+
+                event.target.parentNode.remove();//删除DOM元素
+
+                that.setData(function(i){
+                    that.goods.splice(i,1);
+                });  // 删除localstorage的数据
+            }
+        }
+        this.tbody.oninput = function(){
+            if(event.target.className == "changeNum"){
+                that.id = event.target.parentNode.parentNode.getAttribute("index");
+                // 修改localstorage的数据
+                that.setData(function(i){
+                    that.goods[i].num = event.target.value;
+                });
+            }
+        }
+    }
+    Car.prototype.setData=function(callback){
+        for(var i=0;i<this.goods.length;i++){
+            if(this.goods[i].id == this.id){
+                // 执行回调函数
+                callback(i);
+            }
+        }
+        localStorage.setItem("goods",JSON.stringify(this.goods));
+    }
+    Car.prototype.init=function(){
+        var that = this;
+        ajaxGet(this.url,function(res){
+            that.res = JSON.parse(res);
+            that.getData();
+        })
+    }
+    Car.prototype.getData=function(){
+        	this.goods = localStorage.getItem("goods") ? JSON.parse(localStorage.getItem("goods")) : [];
+        	this.display();
+        }
+        Car.prototype.display=function(){
+        	var str = "";
+        	for(var i=0;i<this.res.length;i++){
+        		for(var j=0;j<this.goods.length;j++){
+        			if(this.res[i].goodsId == this.goods[j].id){
+        				str += `<tr index="${this.res[i].goodsId}">
+                                    <td><img src="${this.res[i].src}" alt=""></td>
+                                    <td>${this.res[i].name}</td>
+                                    <td>${this.res[i].price}</td>
+                                    <td><input type="number" value="${this.goods[j].num}" min=1 class="changeNum"></td>
+                                    <td class="del">X</td>
+                                </tr>`;
+                                this.odiv.style.display = "none";
+        			}
+        		}
+        	}
+        	this.tbody.innerHTML = str;
+        }
+
+    new Car();     
+
+
+</script>
+</html>
